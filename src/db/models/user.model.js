@@ -31,6 +31,7 @@ export class User {
     } catch (error) {
       console.log('error create', error)
     }
+    return user
   }
 
   static async delete(user) {

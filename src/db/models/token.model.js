@@ -13,8 +13,27 @@ export class Token {
   static async create(userId, refreshToken) {
     try {
       await pool.query(`INSERT INTO tokens (token, userId) VALUES ('${userId}', '${refreshToken}')`)
+      return {userId, refreshToken}
     } catch (error) {
       console.log('error create', error)
+    }
+  }
+
+  static async update(userId, refreshToken) {
+    try {
+      await pool.query(`UPDATE tokens SET token = '${refreshToken}' WHERE userId = '${userId}'`)
+      return {userId, refreshToken}
+    } catch (error) {
+      
+    }
+  }
+
+  static async findToken(userId) {
+    try {
+      const result = await pool.query(`SELECT * FROM tokens WHERE userId = '${userId}'`)
+      return result.rows[0]
+    } catch (error) {
+      console.log('error while getting token', error)
     }
   }
  }
