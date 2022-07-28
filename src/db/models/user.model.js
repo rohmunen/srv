@@ -50,9 +50,9 @@ export class User {
     }
   }
 
-  static async getById(user) {
+  static async getByEmail(email) {
     try {
-      const userData = await pool.query(`SELECT * FROM users WHERE id = '${user.id}';`)
+      const userData = await pool.query(`SELECT * FROM users WHERE id = '${email}}';`)
       console.log(userData.rows[0])
       return userData.rows[0]
     } catch (error) {

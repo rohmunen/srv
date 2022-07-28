@@ -10,6 +10,16 @@ class UserController {
       next(e)
     }
   }
+
+  async login(req, res, next) {
+    try {
+      const { email, password } = req.body
+      const userData = await userService.login(email, password)
+      return res.json(userData)
+    } catch (error) {
+      next(e)
+    }
+  } 
 }
 
 export default new UserController()
