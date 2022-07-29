@@ -1,10 +1,10 @@
 export class TagDto {
-  constructor(user, tag){
+  constructor(data){
     this.creator = {
-      nickname: user.nickname,
-      uid: user.id
+      nickname: data.nickname,
+      uid: data.id
     }
-    this.name = tag.name
-    this.sortOrder = tag.sortorder
+    this.name = data.name
+    this.sortOrder = data.sortorder
   }
 }

@@ -38,7 +38,6 @@ const checkForTables = async () => {
     FROM information_schema.tables
     WHERE table_schema='public'
     AND table_type='BASE TABLE';`)
-    console.log('rows', tables.rows)
     if (tables.rows.findIndex(table => table.table_name === 'users' || table.table_name === 'tags' || table.table_name === 'usertag') === -1) {
       console.log('creating new tables')
       await client.query(`

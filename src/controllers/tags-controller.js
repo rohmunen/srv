@@ -21,7 +21,18 @@ class TagsController {
       const tagData = await tagsService.getTagById(id)
       return res.json(tagData)
     } catch (e) {
-      
+      next(e)
+    }
+  }
+
+  async getTags(req, res, next) {
+    const { page, pageSize, sortByOrder, sortByName } = req.query
+    console.log(req.query)
+    try {
+      const tags = await tagsService.getTags(sortByOrder, sortByName, page, pageSize)
+      return res.json(tags)
+    } catch (e) {
+      next(e)
     }
   }
 

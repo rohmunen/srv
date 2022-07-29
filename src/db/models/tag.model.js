@@ -1,3 +1,4 @@
+import { TagDto } from "../../dtos/tag-dto.js"
 import { pool } from "../client.js"
 
 export class Tag {
@@ -27,10 +28,23 @@ export class Tag {
 
   static async getOne(id) {
     try {
-      const tag = await pool.query(`SELECT * FROM tags WHERE id = ${id}`)
-      return tag.rows[0]
+      const data = await pool.query(`SELECT * FROM tags LEFT JOIN users ON creator = users.id WHERE tags.id = ${id};`)
+      return data.rows[0]
     } catch (error) {
       console.log('error getting tag', error)
+    }
+  }
+
+  static async get() {
+    try {
+      let tags = []
+      const data = await pool.query(`SELECT * FROM tags LEFT JOIN users ON creator = users.id;`)
+      data.rows.map((el) => {
+        tags.push(new TagDto(el))
+      })
+      return tags
+    } catch (error) {
+      console.log('error getting tags', error)
     }
   }
  }
