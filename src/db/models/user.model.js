@@ -29,7 +29,7 @@ export class User {
       (id, email, nickname, password) 
       VALUES ('${user.id}', '${user.email}', '${user.nickname}', '${user.password}')`)
     } catch (error) {
-      console.log('error create', error)
+      console.log('error creating user', error)
     }
     return user
   }
@@ -38,7 +38,7 @@ export class User {
     try {
       await pool.query(`DELETE FROM users WHERE id = ${user.id};`)
     } catch (error) {
-      console.log('error create', error)
+      console.log('error deleting user', error)
     }
   }
 
@@ -46,17 +46,17 @@ export class User {
     try {
       await pool.query(`UPDATE users SET nickname = ${user.nickname} WHERE id = ${user.id};`)
     } catch (error) {
-      console.log('error create', error)
+      console.log('error updating user', error)
     }
   }
 
   static async getByEmail(email) {
     try {
-      const userData = await pool.query(`SELECT * FROM users WHERE id = '${email}}';`)
+      const userData = await pool.query(`SELECT * FROM users WHERE email = '${email}';`)
       console.log(userData.rows[0])
       return userData.rows[0]
     } catch (error) {
-      console.log('error create', error)
+      console.log('error getting user by email ', error)
     }
   }
  }

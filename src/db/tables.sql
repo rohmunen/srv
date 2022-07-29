@@ -6,7 +6,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE tags (
-  id int PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   creator UUID,
   FOREIGN KEY (creator) REFERENCES users (id),
   name VARCHAR(40),
@@ -17,4 +17,12 @@ CREATE TABLE tokens (
   token varchar(512) PRIMARY KEY,
   userId UUID,
   FOREIGN KEY (userId) REFERENCES users (id)
+);
+
+CREATE TABLE usertag (
+  userId UUID,
+  FOREIGN KEY (userId) REFERENCES users (id),
+  tagId SERIAL ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (tagId) REFERENCES tags (id),
+  PRIMARY KEY (userId, tagId)
 );

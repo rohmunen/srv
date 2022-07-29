@@ -31,7 +31,6 @@ const createDbIfNotExists = async () => {
 }
 
 const checkForTables = async () => {
-  console.log('qweqweqwe')
   const client = new pg.Pool(config)
   try {
     const tables = await client.query(`
@@ -40,7 +39,7 @@ const checkForTables = async () => {
     WHERE table_schema='public'
     AND table_type='BASE TABLE';`)
     console.log('rows', tables.rows)
-    if (tables.rows.findIndex(table => table.table_name === 'users' || table.table_name === 'tags' || table.table_name === 'tokens') === -1) {
+    if (tables.rows.findIndex(table => table.table_name === 'users' || table.table_name === 'tags' || table.table_name === 'usertag') === -1) {
       console.log('creating new tables')
       await client.query(`
       CREATE TABLE users (
@@ -52,17 +51,19 @@ const checkForTables = async () => {
       `)
       await client.query(`
       CREATE TABLE tags (
-        id int,
+        id SERIAL PRIMARY KEY,
         creator UUID,
         FOREIGN KEY (creator) REFERENCES users (id),
         name VARCHAR(40),
         sortOrder int default(0)
       );
       `)
-      await client.query(`CREATE TABLE tokens (
-        token varchar(512) PRIMARY KEY,
+      await client.query(`CREATE TABLE usertag (
         userId UUID,
-        FOREIGN KEY (userId) REFERENCES users (id)
+        FOREIGN KEY (userId) REFERENCES users (id),
+        tagId int,
+        FOREIGN KEY (tagId) REFERENCES tags (id),
+        PRIMARY KEY (userId, tagId)
       );`)
     }
   } catch (error) {

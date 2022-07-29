@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import router from './router.js'
 import { createDbIfNotExists, checkForTables, connectDB } from './db/client.js'
+import { errorMiddleware } from './middlewares/error-middleware.js'
 
 export default class Server {
 
@@ -15,7 +16,7 @@ export default class Server {
     server.initDb()
     server.initMiddlewares()
     server.initRouter()
-    //server.initErrorHandling()
+    server.initErrorHandling()
     return server
   }
 
@@ -24,18 +25,18 @@ export default class Server {
     this.server.use(cors())
   }
 
-  //initErrorHandling() {
-  //  this.server.use(errorMiddleware)
-  //}
+  initErrorHandling() {
+    this.server.use(errorMiddleware)
+  }
 
   initRouter() {
     this.server.use('/api', router)
   }
 
   async initDb() {
-    await createDbIfNotExists();
-    await checkForTables();
-    await connectDB();
+    createDbIfNotExists();
+    checkForTables();
+    connectDB();
   }
 
   async listen() {
