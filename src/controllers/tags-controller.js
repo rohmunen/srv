@@ -15,6 +15,16 @@ class TagsController {
     }
   }
 
+  async getTagById(req, res, next) {
+    const id = req.params.id
+    try {
+      const tagData = await tagsService.getTagById(id)
+      return res.json(tagData)
+    } catch (e) {
+      
+    }
+  }
+
 }
 
 export default new TagsController()

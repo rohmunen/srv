@@ -8,6 +8,7 @@ const router = Router()
 router.post('/signin', userController.signin)
 router.post('/login', userController.login)
 router.get('/refresh', authMiddleware, userController.refresh)
+router.get('/tag/:id', authMiddleware, tagsController.getTagById)
 router.post('/tag', authMiddleware, tagsController.create)
 
 export default router

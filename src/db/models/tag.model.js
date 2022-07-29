@@ -24,4 +24,13 @@ export class Tag {
       console.log('error creating user', error)
     }
   }
+
+  static async getOne(id) {
+    try {
+      const tag = await pool.query(`SELECT * FROM tags WHERE id = ${id}`)
+      return tag.rows[0]
+    } catch (error) {
+      console.log('error getting tag', error)
+    }
+  }
  }
