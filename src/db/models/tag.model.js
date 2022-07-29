@@ -19,7 +19,6 @@ export class Tag {
       INSERT INTO tags 
       (creator, name, sortOrder) 
       VALUES ('${tag.creator}', '${tag.name}', '${tag.sortOrder || 0}') RETURNING creator, name, sortOrder;`)
-      await pool.query(`INSERT INTO usertag(tagId, userId) SELECT currval('tags_id_seq'), '${tag.creator}';`);
       return newTag.rows[0]
     } catch (error) {
       console.log('error creating user', error)
