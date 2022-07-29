@@ -37,11 +37,14 @@ class UserService {
 
   getUser(authorizationHeader) {
     const userData = tokenService.validateAccessToken(authorizationHeader)
-    if (!userData) {
-      throw ApiError.UnauthorizedError()
-    }
     const user = User.getByEmail(userData.email)
     return user
+  }
+
+  async update(authorizationHeader, user) {
+    const {id} = tokenService.validateAccessToken(authorizationHeader)
+    const result = await User.update(id, user)
+    return result
   }
 }
 

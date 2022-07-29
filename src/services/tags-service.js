@@ -43,6 +43,24 @@ class TagsService {
     }
     return tags
   }
+
+  async delete(tagId, userId) {
+    const tag = Tag.getOne(tagId)
+    if (tag.creator !== userId) {
+      throw ApiError.BadRequest()
+    }
+    const id = Tag.delete(tagId)
+    return id
+  }
+
+  async update(tagId, userId, tagData) {
+    const tag = Tag.getOne(tagId)
+    if (tag.creator !== userId) {
+      throw ApiError.BadRequest()
+    }
+    const id = Tag.update(tagId, tagData)
+    return id
+  }
 }
 
 export default new TagsService()

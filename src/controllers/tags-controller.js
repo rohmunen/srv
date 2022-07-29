@@ -1,6 +1,6 @@
 import tagsService from '../services/tags-service.js';
 import tokenService from '../services/token-service.js';
-import userService from '../services/user-service.js';
+
 
 class TagsController {
   async create(req, res, next) {
@@ -36,6 +36,30 @@ class TagsController {
     }
   }
 
+  async delete(req, res, next) {
+    const authorizationHeader = req.header('Authorization').split(' ')[1]
+    const tagId = req.params.id
+    const { userId } = tokenService.validateAccessToken(authorizationHeader)
+    try {
+      const result = await tagsService.delete(tagId, userId)
+      return res.json(result)
+    } catch (e) {
+      next(e)
+    }
+  }
+
+  async update(req, res, next) {
+    const authorizationHeader = req.header('Authorization').split(' ')[1]
+    const tagId = req.params.id
+    const { userId } = tokenService.validateAccessToken(authorizationHeader)
+    const tag = req.body
+    try {
+      const result = await tagsService.update(tagId, userId, tag)
+      return res.json(result)
+    } catch (e) {
+      next(e)
+    }
+  }
 }
 
 export default new TagsController()

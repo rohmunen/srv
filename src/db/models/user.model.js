@@ -42,9 +42,21 @@ export class User {
     }
   }
 
-  static async update(user) {
+  static async update(id, user) {
+    if(user.password) {
+      user = await this.beforeCreate(user)
+    }
     try {
-      await pool.query(`UPDATE users SET nickname = ${user.nickname} WHERE id = ${user.id};`)
+      if (user.email) {
+        await pool.query(`UPDATE users SET email = '${user.email}' WHERE id = '${id}';`)
+      }
+      if (user.nickname) {
+        await pool.query(`UPDATE users SET nickname = '${user.nickname}' WHERE id = '${id}';`)
+      }
+      if (user.password) {
+        await pool.query(`UPDATE users SET password = '${user.password}' WHERE id = '${id}';`)
+      }
+      return {email: user.email, nickname: user.nickname}
     } catch (error) {
       console.log('error updating user', error)
     }

@@ -40,6 +40,16 @@ class UserController {
       next(e)
     }
   }
+
+  async update(req, res, next) {
+    try {
+      const authorizationHeader = req.header('Authorization').split(' ')[1]
+      const result = await userService.update(authorizationHeader, req.body)
+      return res.json(result)
+    } catch (e) {
+      next(e)
+    }
+  }
 }
 
 export default new UserController()
