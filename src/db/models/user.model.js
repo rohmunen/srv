@@ -1,6 +1,7 @@
 import { pool } from "../client.js"
 import bcrypt from "bcrypt"
 import { v4 as uuidv4 } from 'uuid';
+import { Validator } from "../../utils/validator.js";
 
 export class User {
   id = ''
@@ -16,6 +17,9 @@ export class User {
 
   static async beforeCreate(user) {
     const id = uuidv4();
+    Validator.ValidatePassword(user.password)
+    Validator.ValidateEmail(user.email)
+    Validator.ValidateUserName(user.nickname)
     const hashPassword = await bcrypt.hash(user.password, 3)
     user.password = hashPassword
     user.id = id
@@ -68,6 +72,15 @@ export class User {
       return userData.rows[0]
     } catch (error) {
       console.log('error getting user by email ', error)
+    }
+  }
+
+  static async getByName(name) {
+    try {
+      const userData = await pool.query(`SELECT * FROM users WHERE nickname = '${name}';`)
+      return userData.rows[0]
+    } catch (error) {
+      console.log('error getting user by id ', error)
     }
   }
 

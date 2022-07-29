@@ -1,5 +1,7 @@
 import { TagDto } from "../../dtos/tag-dto.js"
 import { pool } from "../client.js"
+import { Validator } from "../../utils/validator.js";
+
 
 export class Tag {
   id = ''
@@ -13,7 +15,12 @@ export class Tag {
     this.sortOrder = sortOrder
   }
 
+  static async beforeCreate(tag) {
+    Validator.ValidateTagName(tag.name)
+  }
+
   static async create(tag) {
+    await this.beforeCreate(tag)
     try {
       const newTag = await pool.query(`
       INSERT INTO tags 
@@ -34,6 +41,15 @@ export class Tag {
     }
   }
 
+  static async getByName(name) {
+    try {
+      const data = await pool.query(`SELECT * FROM tags WHERE name = '${name}'`)
+      return data.rows[0]
+    } catch (error) {
+      console.log('error getting tag', error)
+    }
+  }
+
   static async get() {
     try {
       let tags = []
@@ -48,6 +64,7 @@ export class Tag {
   }
 
   static async update(id, {name, sortOrder}) {
+    await this.beforeCreate({name})
     try {
       if (name) {
         await pool.query(`UPDATE tags SET name = '${name}' WHERE id = ${id};`)
