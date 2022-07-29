@@ -1,6 +1,4 @@
 import { pool } from "../client.js"
-import bcrypt from "bcrypt"
-import { v4 as uuidv4 } from 'uuid';
 
 export class Tag {
   id = ''
@@ -16,14 +14,14 @@ export class Tag {
 
   static async create(tag) {
     try {
-      await pool.query(`
+      const newTag = await pool.query(`
       INSERT INTO tags 
       (creator, name, sortOrder) 
-      VALUES ('${tag.creator}', '${tag.name}', '${tag.sortOrder || 0}');`)
+      VALUES ('${tag.creator}', '${tag.name}', '${tag.sortOrder || 0}') RETURNING creator, name, sortOrder;`)
       await pool.query(`INSERT INTO usertag(tagId, userId) SELECT currval('tags_id_seq'), '${tag.creator}';`);
+      return newTag.rows[0]
     } catch (error) {
       console.log('error creating user', error)
     }
-    return tag
   }
  }
