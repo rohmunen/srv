@@ -27,7 +27,6 @@ class TagsController {
 
   async getTags(req, res, next) {
     const { page, pageSize, sortByOrder, sortByName } = req.query
-    console.log(req.query)
     try {
       const tags = await tagsService.getTags(sortByOrder, sortByName, page, pageSize)
       return res.json(tags)

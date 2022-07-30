@@ -11,7 +11,6 @@ export class Usertag {
 
   static async add(id, tags) {
     try {
-      console.log(tags)
       let tagString = tags.reduce((prevEl, el) => {
         return prevEl + `('${id}', '${el}'),`
       }, '')

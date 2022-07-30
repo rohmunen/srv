@@ -5,8 +5,10 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "start": "yarn migrate-up && node src/index.js",
+    "dev": "nodemon src/index.js",
+    "migrate-up": "node src/db/migrations/migrate-up.js",
+    "migrate-down": "node src/db/migrations/migrate-down.js"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",

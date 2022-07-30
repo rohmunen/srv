@@ -82,7 +82,6 @@ export class Tag {
     try {
       await pool.query(`DELETE FROM usertag WHERE tagId = ${id} RETURNING tagId;`)
       const result = await pool.query(`DELETE FROM tags WHERE id = ${id} RETURNING id;`)
-      console.log(result)
       return result.rows[0]
     } catch (error) {
       console.log('error deleting tag', error)

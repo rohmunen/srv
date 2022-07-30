@@ -28,7 +28,6 @@ export class User {
 
   static async create(user) {
     user = await this.beforeCreate(user)
-    console.log(user)
     try {
       await pool.query(`INSERT INTO users 
       (id, email, nickname, password) 
@@ -79,8 +78,6 @@ export class User {
   static async getByName(name) {
     try {
       const userData = await pool.query(`SELECT * FROM users WHERE nickname = '${name}';`)
-      console.log(userData)
-      console.log(userData.rows[0])
       return userData.rows[0]
     } catch (error) {
       console.log('error getting user by id ', error)
