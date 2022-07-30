@@ -4,7 +4,17 @@ import Server from "./server.js"
 
 const start = async () => {
   const server = Server.create()
-  await server.listen()
+  server.listen()
 }
 
-start()
+let retries = 5
+while(retries) {
+  try {
+    await start()
+    break;
+  } catch (error) {
+    console.log(error)
+    retries -= 1
+    await new Promise(res => setTimeout(res, 5000))
+  }
+}

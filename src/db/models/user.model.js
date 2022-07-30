@@ -18,8 +18,8 @@ export class User {
   static async beforeCreate(user) {
     const id = uuidv4();
     Validator.ValidatePassword(user.password)
-    Validator.ValidateEmail(user.email)
-    Validator.ValidateUserName(user.nickname)
+    await Validator.ValidateEmail(user.email)
+    await Validator.ValidateUserName(user.nickname)
     const hashPassword = await bcrypt.hash(user.password, 3)
     user.password = hashPassword
     user.id = id
@@ -28,6 +28,7 @@ export class User {
 
   static async create(user) {
     user = await this.beforeCreate(user)
+    console.log(user)
     try {
       await pool.query(`INSERT INTO users 
       (id, email, nickname, password) 
@@ -78,6 +79,8 @@ export class User {
   static async getByName(name) {
     try {
       const userData = await pool.query(`SELECT * FROM users WHERE nickname = '${name}';`)
+      console.log(userData)
+      console.log(userData.rows[0])
       return userData.rows[0]
     } catch (error) {
       console.log('error getting user by id ', error)

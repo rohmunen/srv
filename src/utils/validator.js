@@ -4,7 +4,11 @@ import {ApiError} from './api-errors.js'
 import { REGEXP } from './constants.js'
 
 export class Validator {
-  static ValidateEmail(email) {
+  static async ValidateEmail(email) {
+    const user = await User.getByEmail(email)
+    if (user) {
+      throw ApiError.BadRequest('пользователь с таким email уже существует')
+    }
     if(!String(email)
     .toLowerCase()
     .match(
@@ -18,14 +22,14 @@ export class Validator {
       throw ApiError.BadRequest('некорректный пароль')
     }
   }
-  static ValidateUserName(name) {
-    const user = User.getByName(name)
+  static async ValidateUserName(name) {
+    const user = await User.getByName(name)
     if (user) {
       throw ApiError.BadRequest('пользователь с таким ником уже существует')
     }
   }
-  static ValidateTagName(tag) {
-    const dbTag = Tag.getByName(tag)
+  static async ValidateTagName(tag) {
+    const dbTag = await Tag.getByName(tag)
     if (dbTag) {
       throw ApiError.BadRequest('tag уже существует')
     }
